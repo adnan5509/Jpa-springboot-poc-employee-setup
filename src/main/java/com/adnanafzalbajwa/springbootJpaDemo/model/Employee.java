@@ -2,6 +2,7 @@ package com.adnanafzalbajwa.springbootJpaDemo.model;
 
 import com.adnanafzalbajwa.springbootJpaDemo.deserializer.EmployeeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +13,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "EMPLOYEE")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "EMPLOYEE_TYPE")
 @JsonDeserialize(using = EmployeeDeserializer.class)
 public abstract class Employee {
 
