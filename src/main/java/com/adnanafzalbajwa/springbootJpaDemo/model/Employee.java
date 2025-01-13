@@ -1,22 +1,20 @@
 package com.adnanafzalbajwa.springbootJpaDemo.model;
 
-import com.adnanafzalbajwa.springbootJpaDemo.enums.EmployeeType;
+import com.adnanafzalbajwa.springbootJpaDemo.deserializer.EmployeeDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-
-import java.util.Date;
 
 @Entity
 @Table(name = "EMPLOYEE")
-public class Employee {
+@Inheritance(strategy = InheritanceType.JOINED)
+@JsonDeserialize(using = EmployeeDeserializer.class)
+public abstract class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,11 +24,14 @@ public class Employee {
 
     private int age;
 
-    @Temporal(TemporalType.DATE)
-    private Date dob;
+    public Employee(final String name, final int age) {
+        this.name = name;
+        this.age = age;
+    }
 
-    @Enumerated(EnumType.STRING)
-    private EmployeeType employeeType;
+    public Employee() {
+
+    }
 
     public int getId() {
         return id;
@@ -56,30 +57,12 @@ public class Employee {
         this.age = age;
     }
 
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(final Date dob) {
-        this.dob = dob;
-    }
-
-    public EmployeeType getEmployeeType() {
-        return employeeType;
-    }
-
-    public void setEmployeeType(final EmployeeType employeeType) {
-        this.employeeType = employeeType;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
-                ", dob=" + dob +
-                ", employeeType=" + employeeType +
                 '}';
     }
 }
