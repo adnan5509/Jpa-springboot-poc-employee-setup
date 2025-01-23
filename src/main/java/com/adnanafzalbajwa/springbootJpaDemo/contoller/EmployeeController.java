@@ -1,7 +1,12 @@
 package com.adnanafzalbajwa.springbootJpaDemo.contoller;
 
+import com.adnanafzalbajwa.springbootJpaDemo.dto.EmployeeDto;
 import com.adnanafzalbajwa.springbootJpaDemo.model.Employee;
+import com.adnanafzalbajwa.springbootJpaDemo.request.CreateEmployeeRequest;
+import com.adnanafzalbajwa.springbootJpaDemo.response.CreateEmployeeResponse;
 import com.adnanafzalbajwa.springbootJpaDemo.service.EmployeeService;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +27,10 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        Employee createdEmployee = employeeService.createEmployee(employee);
-        return ResponseEntity.ok(createdEmployee);
+    public CreateEmployeeResponse createEmployee(@RequestBody @Valid CreateEmployeeRequest createEmployeeRequest) {
+        EmployeeDto employeeDto = new ModelMapper().map(createEmployeeRequest, EmployeeDto.class);
+        EmployeeDto createdEmployee = employeeService.createEmployee(employeeDto);
+        return new ModelMapper().map(createdEmployee, CreateEmployeeResponse.class);
     }
 
     @GetMapping("/{id}")
