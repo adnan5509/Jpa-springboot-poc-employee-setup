@@ -1,10 +1,10 @@
 package com.adnanafzalbajwa.springbootJpaDemo.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -20,7 +20,7 @@ public class CreateEmployeeRequest {
     @Min(value = 0, message = "Age must not be less than 0")
     private double salary;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "EEE MMM dd HH:mm:ss zzz yyyy", timezone = "CET")
     private Date dateOfJoining;
 
     @Size(min = 7, max = 14, message = "Contact Number must be 7-14 characters")

@@ -1,24 +1,16 @@
 package com.adnanafzalbajwa.springbootJpaDemo.model;
 
-import com.adnanafzalbajwa.springbootJpaDemo.deserializer.EmployeeDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "EMPLOYEE")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "EMPLOYEE_TYPE")
-@JsonDeserialize(using = EmployeeDeserializer.class)
-public abstract class Employee {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -41,9 +33,7 @@ public abstract class Employee {
         this.age = age;
     }
 
-    public Employee() {
-
-    }
+    public Employee() {}
 
     public int getId() {
         return id;

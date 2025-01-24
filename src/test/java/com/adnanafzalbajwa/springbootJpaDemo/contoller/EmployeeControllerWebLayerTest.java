@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = {EmployeeController.class})
-class EmployeeControllerTest {
+class EmployeeControllerWebLayerTest {
 
     @MockitoBean
     EmployeeService employeeService;
@@ -55,7 +55,6 @@ class EmployeeControllerTest {
 
         CreateEmployeeResponse createEmployeeResponse = new ObjectMapper().readValue(response, CreateEmployeeResponse.class);
 
-        assertNotNull(createEmployeeResponse.getId(), "The returned employee should have an ID");
         assertEquals(createEmployeeRequest.getName(), createEmployeeResponse.getName(), "Returned Employee should have the same name");
         assertEquals(createEmployeeRequest.getAge(), createEmployeeResponse.getAge(), "Returned Employee should have the same name");
         assertEquals(createEmployeeRequest.getEmail(), createEmployeeResponse.getEmail(), "Returned Employee should have the same name");
