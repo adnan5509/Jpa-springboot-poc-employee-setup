@@ -4,6 +4,7 @@ import com.adnanafzalbajwa.springbootJpaDemo.dto.EmployeeDto;
 import com.adnanafzalbajwa.springbootJpaDemo.model.Employee;
 import com.adnanafzalbajwa.springbootJpaDemo.request.CreateEmployeeRequest;
 import com.adnanafzalbajwa.springbootJpaDemo.response.CreateEmployeeResponse;
+import com.adnanafzalbajwa.springbootJpaDemo.response.GetEmployeeResponse;
 import com.adnanafzalbajwa.springbootJpaDemo.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee")
@@ -34,14 +37,27 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable int id) {
+    public GetEmployeeResponse getEmployee(@PathVariable int id) {
         Optional<Employee> fetchedEmployee = employeeService.getEmployee(id);
         if (fetchedEmployee.isPresent()) {
-            return ResponseEntity.ok(fetchedEmployee.get());
+            EmployeeDto employeeDto = new ModelMapper().map(fetchedEmployee, EmployeeDto.class);
+            return new ModelMapper().map(employeeDto, GetEmployeeResponse.class);
         } else {
-            return (ResponseEntity<Employee>) ResponseEntity.notFound();
+            return (GetEmployeeResponse) ResponseEntity.notFound();
         }
     }
+
+    @GetMapping
+    public List<GetEmployeeResponse> getAllEmployee() {
+        List<Employee> fetchedEmployees = employeeService.getAllEmployees();
+        ModelMapper modelMapper = new ModelMapper();
+        List<GetEmployeeResponse> employeeResponseList = fetchedEmployees
+                .stream()
+                .map(employee -> modelMapper.map(employee, GetEmployeeResponse.class))
+                .collect(Collectors.toList());
+        return employeeResponseList;
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable int id, @RequestBody Employee employeeDetails) {

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +35,12 @@ public class EmployeeService {
 
     public Optional getEmployee(final int id) {
         return employeeRepository.findById(id);
+    }
+
+    public List<Employee> getAllEmployees() {
+        List<Employee> returnedEmployeesList = new ArrayList<>();
+        employeeRepository.findAll().forEach(employee -> returnedEmployeesList.add(employee));
+        return returnedEmployeesList;
     }
 
     @Transactional
